@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+    user:
+        build:
+            context: ./users
+        ports:
+            - "3010:3010"
+        container_name: user
+        hostname: user
+
+    metadata:
+        build:
+            context: ./metadata
+        ports:
+            - "3020:3020"
+        container_name: metadata
+        hostname: metadata
+        
+
+    nginx:
+        restart: always
+        image: nginx:latest
+        container_name: nginx
+        links:
+            - user
+            - metadata
+        volumes:
+            - "./nginx/nginx.conf:/etc/nginx/nginx.conf"
+        ports:
+            - "80:80"
